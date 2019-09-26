@@ -24,6 +24,22 @@ export default function (Glide, Components, Events) {
         this.bind()
       }
     },
+    // method is workaround for unknown play/pause bug
+    start2() {
+      if (Glide.settings.autoplay) {
+        if (isUndefined(this._i)) {
+          this._i = setInterval(() => {
+            // this.stop()
+
+            Components.Run.make('>')
+
+            this.start2()
+
+            // Events.emit('autoplay')
+          }, this.time)
+        }
+      }
+    },
 
     /**
      * Starts autoplaying in configured interval.
@@ -32,19 +48,19 @@ export default function (Glide, Components, Events) {
      * @return {Void}
      */
     start () {
-      if (Glide.settings.autoplay) {
-        if (isUndefined(this._i)) {
-          this._i = setInterval(() => {
-            this.stop()
-
-            Components.Run.make('>')
-
-            this.start()
-
-            Events.emit('autoplay')
-          }, this.time)
-        }
-      }
+      // if (Glide.settings.autoplay) {
+      //   if (isUndefined(this._i)) {
+      //     this._i = setInterval(() => {
+      //       this.stop()
+      //
+      //       Components.Run.make('>')
+      //
+      //       this.start()
+      //
+      //       Events.emit('autoplay')
+      //     }, this.time)
+      //   }
+      // }
     },
 
     /**
@@ -63,15 +79,15 @@ export default function (Glide, Components, Events) {
      */
     bind () {
       Binder.on('mouseenter', Components.Html.root, () => {
-        this.stop()
-
-        Events.emit('autoplay.enter')
+        // this.stop()
+        //
+        // Events.emit('autoplay.enter')
       })
 
       Binder.on('mouseleave', Components.Html.root, () => {
-        this.start()
-
-        Events.emit('autoplay.leave')
+        // this.start()
+        //
+        // Events.emit('autoplay.leave')
       })
     },
 
@@ -121,6 +137,9 @@ export default function (Glide, Components, Events) {
    * - on updating via API to reset interval that may changed
    */
   Events.on(['run.before', 'pause', 'destroy', 'swipe.start', 'update'], () => {
+    // Autoplay.stop()
+  })
+  Events.on(['pause2'], function() {
     Autoplay.stop()
   })
 
@@ -131,7 +150,10 @@ export default function (Glide, Components, Events) {
    * - while ending a swipe
    */
   Events.on(['run.after', 'play', 'swipe.end'], () => {
-    Autoplay.start()
+    // Autoplay.start()
+  })
+  Events.on(['play2'], function() {
+    Autoplay.start2()
   })
 
   /**

@@ -126,11 +126,21 @@ export default class Glide {
    * @return {Glide}
    */
   play (interval = false) {
+    // if (interval) {
+    //   this.settings.autoplay = interval
+    // }
+    //
+    // this._e.emit('play')
+
+    return this
+  }
+
+  play2 (interval = false) {
     if (interval) {
       this.settings.autoplay = interval
     }
 
-    this._e.emit('play')
+    this._e.emit('play2')
 
     return this
   }
@@ -141,7 +151,7 @@ export default class Glide {
    * @return {Glide}
    */
   pause () {
-    this._e.emit('pause')
+    this._e.emit('pause2')
 
     return this
   }
